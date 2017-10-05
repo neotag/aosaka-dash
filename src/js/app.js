@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as dat from 'dat.gui/build/dat.gui.min';
 import settings from './settings.js';
 
 const scene = window.scene = new THREE.Scene();
@@ -10,11 +11,39 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
+const setGUI = () => {
+  const gui = new dat.GUI();
+
+  const tempCtrl = function () {
+    this.cameraPosX = 0;
+    this.lightPosX = 0;
+  }
+
+  const tempObj = new tempCtrl();
+  const folder = gui.addFolder('temp folder');
+
+  const cameraPosX = () => {
+    camera.position.x = tempObj.cameraPosX;
+    camera.position.y = tempObj.cameraPosX;
+    camera.position.z = tempObj.cameraPosX;
+  }
+
+  const lightPosX = () => {
+    directionalLight.position.set(tempObj.lightPosX, tempObj.lightPosX *1.5, tempObj.lightPosX *2);
+    directionalLight.lookAt(cube.position)
+  }
+
+  gui.add( tempObj, 'cameraPosX', 0, 20).onChange(cameraPosX)
+  gui.add( tempObj, 'lightPosX', -300, 300).onChange(lightPosX)
+}
+
 const init = () => {
   setStage();
   const cube = createCube();
   createLight();
   animate(cube);
+  setGUI();
+  setHelper();
 }
 
 const setStage = () => {
@@ -49,6 +78,15 @@ const animate = (cube) => {
 
   renderer.setClearColor( 0xdddddd, 1)
   renderer.render(scene, camera);
+}
+
+const setHelper = () => {
+  const gridHelper = new THREE.GridHelper(200,50); // size, step
+  scene.add(gridHelper);
+  const axisHelper = new THREE.AxisHelper(200,50);
+  scene.add(axisHelper);
+  const lightHelper = new THREE.DirectionalLightHelper(directionalLight, 20);
+  scene.add(lightHelper);
 }
 
 document.addEventListener("DOMContentLoaded", init);
