@@ -68,7 +68,7 @@ const createLight = (cube) => {
 
 const createCube = () => {
   const geometry = new THREE.CubeGeometry( 1, 1, 1 );
-  const material = new THREE.MeshBasicMaterial( { color: 0xFF0000 } );
+  const material = new THREE.MeshPhongMaterial( { color: 0xFF0000 } );
   const cube = new THREE.Mesh( geometry, material );
   scene.add( cube );
 
