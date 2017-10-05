@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@types/dat-gui@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@types/dat-gui/-/dat-gui-0.6.3.tgz#2285a22ee28fbed05f3932dda9144d18c9903b5d"
+
 JSONStream@^1.0.3:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/JSONStream/-/JSONStream-1.3.1.tgz#707f761e01dae9e16f1bcf93703b78c70966579a"
@@ -1070,6 +1074,10 @@ dashdash@^1.12.0:
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
   dependencies:
     assert-plus "^1.0.0"
+
+dat.gui@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/dat.gui/-/dat.gui-0.6.1.tgz#7c3d0a2ac2c570dafb61b91203fd7fe3171d6ac7"
 
 date-now@^0.1.4:
   version "0.1.4"
