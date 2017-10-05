@@ -27,8 +27,9 @@
     "browserify": "^14.4.0",
     "gulp": "^3.9.1",
     "gulp-util": "^3.0.8",
+    "gulp-watch": "^4.3.11",
     "gulp-webserver": "^0.9.1",
-    "vinyl-source-stream": "^1.1.0",
-    "gulp-watch": "^4.3.11"
+    "three": "^0.87.1",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
