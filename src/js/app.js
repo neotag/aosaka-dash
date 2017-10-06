@@ -2,16 +2,25 @@ import * as THREE from 'three';
 import * as dat from 'dat.gui/build/dat.gui.min';
 import settings from './settings.js';
 
-window.THREE = THREE;
+import Light from './base/lights/basic-light.js';
+import AmbientLight from './base/lights/ambient-light.js';
+import Camera from './base/cameras/basic-camera.js';
 
-const scene = window.scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75,// Field of view
-  settings.window.width / settings.window.height,// Aspect ratio
-  0.1,// Near
-  1000// Far
-);
-const renderer = new THREE.WebGLRenderer();
+import Room from './stage1/materials/room.js';
+
+
+window.THREE = THREE;
+window.APP = {}
+
+const renderer = window.APP.renderer = new THREE.WebGLRenderer();
+const scene = window.APP.scene = new THREE.Scene();
+const camera = window.APP.camera = new Camera( { lookAt: scene.position } );
+
+const directionalLight = new Light();
+const ambientLight = new AmbientLight();
+
+// Materials
+const room = new Room();
 
 const setGUI = () => {
   const gui = new dat.GUI();
@@ -41,10 +50,14 @@ const setGUI = () => {
 
 const init = () => {
   setStage();
-  createLight(cube);
+  scene.add( room );
+  setLight(cube);
   animate(cube);
   setGUI();
   setHelper();
+
+  renderer.setClearColor( 0xdddddd, 1)
+  renderer.render(scene, camera);
 }
 
 const setStage = () => {
@@ -52,31 +65,21 @@ const setStage = () => {
   document.body.appendChild( renderer.domElement );
 }
 
-const createLight = (cube) => {
-  const directionalLight = window.directionalLight = new THREE.DirectionalLight(0xffffcc, 1);
-  directionalLight.position.set(0, 100, 30);
-  scene.add(directionalLight);
+const setLight = (cube) => {
+  directionalLight.addTo(scene);
+  directionalLight.lookAt(cube);
+  ambientLight.addTo(scene);
+  ambientLight.lookAt(cube);
 
-  const light = window.light = new THREE.AmbientLight( 0x404040 ); // soft white light
-  light.position.set(0, 30, 100);
-  scene.add( light );
-  light.castShadow = true;
-  light.lookAt( cube.position )
-
-  return light;
+  return ambientLight;
 }
 
 const createCube = () => {
   const geometry = new THREE.CubeGeometry( 1, 1, 1 );
   const material = new THREE.MeshPhongMaterial( { color: 0xFF0000 } );
   const cube = new THREE.Mesh( geometry, material );
+  cube.position.y = 0;
   scene.add( cube );
-
-  camera.position.x = 5;
-  camera.position.y = 5;
-  camera.position.z = 5;
-  camera.lookAt( scene.position );
-  //camera.position.y = 1;
 
   return cube;
 }
@@ -88,10 +91,9 @@ const animate = (cube) => {
 
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
-  // camera.rotation.x += 0.1;
-  // camera.rotation.y += 0.2;
+  //camera.rotation.x += 0.001;
+  //ccamera.rotation.y += 0.002;
 
-  // renderer.setClearColor( 0xdddddd, 1)
   renderer.render(scene, camera);
 }
 
@@ -100,7 +102,7 @@ const setHelper = () => {
   scene.add(gridHelper);
   const axisHelper = new THREE.AxisHelper(200,50);
   scene.add(axisHelper);
-  const lightHelper = new THREE.DirectionalLightHelper(directionalLight, 20);
+  const lightHelper = new THREE.PointLightHelper(directionalLight.light, 1);
   scene.add(lightHelper);
 }
 
